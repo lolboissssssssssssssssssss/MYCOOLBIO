@@ -230,7 +230,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
   const bioMessages = [
-    "Fu*k Guns.lol & Fakecrime.bio got banned too often, so I created my own.",
+    "I like to code small projects, learning step by step.",
     "\"Hello, World!\""
   ];
   let bioText = '';
