@@ -3,75 +3,76 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shaatvik | Producer & Designer</title>
+    <title>V1NYL | Producer & Designer</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
         body { background-color: #000; color: #fff; overflow: hidden; height: 100vh; width: 100vw; }
 
-        /* Video Background - Starts playing immediately */
-        #background { 
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-            object-fit: cover; z-index: 1; pointer-events: none; 
+        /* The Overlay Screen */
+        #entry-screen {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #000; display: flex; align-items: center; justify-content: center;
+            z-index: 9999; cursor: pointer; transition: opacity 0.8s ease, visibility 0.8s;
+            user-select: none; -webkit-user-select: none;
         }
 
-        /* Profile Card - Black Shadows & White Text */
+        #entry-text {
+            letter-spacing: 5px; font-size: 11px; color: #fff; font-weight: 300;
+            border: 1px solid rgba(255,255,255,0.2); padding: 12px 25px;
+        }
+
+        /* Video Background */
+        #background-video { 
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            object-fit: cover; z-index: 1; pointer-events: none; opacity: 0.6;
+        }
+
+        /* Profile Card */
         #profile-block { 
             position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); 
-            width: 90%; max-width: 400px; 
-            background: rgba(10, 10, 10, 0.85); 
-            border: 1px solid rgba(255, 255, 255, 0.1); 
-            padding: 35px; border-radius: 20px; z-index: 20; 
-            backdrop-filter: blur(15px);
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.9);
+            width: 90%; max-width: 400px; background: rgba(10, 10, 10, 0.8); 
+            border: 1px solid rgba(255, 255, 255, 0.1); padding: 35px; border-radius: 20px; 
+            z-index: 20; backdrop-filter: blur(15px); box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
         }
 
         .profile-header { display: flex; flex-direction: column; align-items: center; gap: 15px; text-align: center; }
-        
-        .waveform-container { 
-            width: 100%; height: 65px; border-radius: 12px; overflow: hidden; 
-            border: 1px solid rgba(255, 255, 255, 0.15); 
-        }
-        
-        #profile-name { 
-            font-size: 32px; font-weight: 700; color: #fff; 
-            letter-spacing: -0.5px; margin-top: 5px;
-        }
+        .waveform-container { width: 100%; height: 60px; border-radius: 10px; overflow: hidden; border: 1px solid rgba(255, 255, 255, 0.1); }
+        #profile-name { font-size: 32px; font-weight: 700; color: #fff; letter-spacing: -0.5px; }
+        #profile-bio { color: #888; font-size: 14px; margin: 5px 0; font-weight: 300; }
 
-        #profile-bio { color: #aaa; font-size: 14px; margin: 10px 0; line-height: 1.5; font-weight: 300; }
-
-        .skills-container { margin: 25px 0; }
-        .skill { margin-bottom: 15px; }
-        .skill-name { display: flex; justify-content: space-between; font-size: 11px; margin-bottom: 6px; color: #fff; text-transform: uppercase; letter-spacing: 1px; }
-        .skill-bar-bg { height: 4px; background: rgba(255, 255, 255, 0.1); border-radius: 2px; }
+        .skills-container { margin: 20px 0; }
+        .skill { margin-bottom: 12px; }
+        .skill-name { display: flex; justify-content: space-between; font-size: 10px; margin-bottom: 5px; color: #fff; text-transform: uppercase; letter-spacing: 1px; }
+        .skill-bar-bg { height: 3px; background: rgba(255, 255, 255, 0.1); border-radius: 2px; }
         .skill-bar-fill { height: 100%; border-radius: 2px; background: #fff; }
 
-        #music-widget { 
-            background: rgba(255, 255, 255, 0.05); padding: 12px; border-radius: 10px; 
-            display: flex; align-items: center; gap: 12px; 
-            border: 1px solid rgba(255, 255, 255, 0.1); 
-        }
-        .status-dot { color: #fff; font-size: 12px; animation: blink 2s infinite; }
+        #music-widget { background: rgba(255, 255, 255, 0.05); padding: 12px; border-radius: 10px; display: flex; align-items: center; gap: 12px; border: 1px solid rgba(255, 255, 255, 0.05); }
+        .status-dot { color: #fff; font-size: 10px; animation: blink 2s infinite; }
         @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
 
         .social-links { display: flex; justify-content: center; gap: 25px; margin-top: 25px; }
-        .social-icon { width: 24px; height: 24px; transition: 0.3s ease; }
-        .social-icon:hover { transform: translateY(-3px); }
+        .social-icon { width: 26px; height: 26px; transition: 0.3s ease; }
+
+        .fade-out { opacity: 0; visibility: hidden; }
     </style>
 </head>
-<body onclick="playMusic()">
+<body>
 
-    <video id="background" loop muted playsinline autoplay>
+    <div id="entry-screen" onclick="launch()">
+        <div id="entry-text">CLICK TO ENTER</div>
+    </div>
+
+    <video id="v1nyl-bg" loop muted playsinline>
         <source src="assets/bg.mp4" type="video/mp4">
     </video>
 
     <div id="profile-block">
         <div class="profile-header">
             <div class="waveform-container">
-                <img src="https://i.gifer.com/origin/63/6345e1512e376805466188f277d9053c_w200.gif" 
-                     style="width:100%; height:100%; object-fit:cover;" alt="Waveform">
+                <img src="https://i.gifer.com/origin/63/6345e1512e376805466188f277d9053c_w200.gif" style="width:100%; height:100%; object-fit:cover; opacity: 0.5;" alt="Waveform">
             </div>
-            <div id="profile-name">Shaatvik</div>
+            <div id="profile-name">V1NYL</div>
             <div id="profile-bio">Rookie Designer & Veteran Music Producer. <br> "Tryna make that bank IFYKWIM"</div>
         </div>
 
@@ -92,34 +93,36 @@
 
         <div id="music-widget">
             <div class="status-dot">●</div>
-            <div style="font-size: 10px; letter-spacing: 0.5px;">
-                <span style="opacity: 0.6;">NOW PLAYING</span><br>
-                <strong style="font-size: 12px;">Blakk Rockstar - Ken Carson</strong>
+            <div style="font-size: 10px;">
+                <span style="opacity: 0.5;">NOW PLAYING</span><br>
+                <strong style="font-size: 11px;">Blakk Rockstar - Ken Carson</strong>
             </div>
         </div>
 
         <div class="social-links">
-            <a href="https://www.instagram.com/shaatvik.m/" target="_blank">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg" class="social-icon">
-            </a>
-            <a href="https://x.com/shaatvik69798" target="_blank">
-                <img src="https://abs.twimg.com/responsive-web/client-web/icon-ios.b1793a4a.png" class="social-icon">
-            </a>
-            <a href="https://discord.com/users/980731046880493568" target="_blank">
-                <img src="https://static.vecteezy.com/system/resources/previews/018/930/718/original/discord-logo-icon-free-png.png" class="social-icon">
-            </a>
+            <a href="https://www.instagram.com/shaatvik.m/" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg" class="social-icon"></a>
+            <a href="https://x.com/shaatvik69798" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/c/ce/X_logo_2023.svg" class="social-icon"></a>
+            <a href="https://discord.com/users/980731046880493568" target="_blank"><img src="https://www.svgrepo.com/show/353655/discord-icon.svg" class="social-icon"></a>
         </div>
     </div>
 
-    <audio id="background-music" loop>
+    <audio id="v1nyl-audio" loop>
         <source src="assets/blakk-rockstar.mp3" type="audio/mp3">
     </audio>
 
     <script>
-        function playMusic() {
-            const music = document.getElementById('background-music');
-            music.volume = 0.4;
-            music.play();
+        function launch() {
+            const screen = document.getElementById('entry-screen');
+            const audio = document.getElementById('v1nyl-audio');
+            const video = document.getElementById('v1nyl-bg');
+
+            // Hide the wall
+            screen.classList.add('fade-out');
+
+            // Play music & video
+            audio.volume = 0.4;
+            audio.play().catch(e => console.log("Audio blocked"));
+            video.play();
         }
     </script>
 </body>
