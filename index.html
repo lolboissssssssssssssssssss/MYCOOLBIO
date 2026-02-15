@@ -3,168 +3,164 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shaatvik | Console</title>
-    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <title>SHAATVIK // CONSOLE</title>
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root { --neon-glow: 0 0 15px rgba(255, 255, 255, 0.4); }
+        * { margin: 0; padding: 0; box-sizing: border-box; cursor: crosshair; }
+        
         body { 
             background-color: #000; color: #fff; overflow: hidden; 
-            height: 100vh; width: 100vw; font-family: 'Share Tech Mono', monospace; 
+            height: 100vh; width: 100vw; font-family: 'Share Tech Mono', monospace;
         }
 
-        /* VHS Overlay */
-        #vhs-overlay {
+        /* CRT Screen Overlay */
+        body::before {
+            content: " "; display: block; position: fixed; top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), 
+                        linear-gradient(90deg, rgba(255, 0, 0, 0.05), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.05));
+            z-index: 100; background-size: 100% 2px, 3px 100%; pointer-events: none;
+        }
+
+        #background-container {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            z-index: 50; pointer-events: none;
-            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.2) 50%);
-            background-size: 100% 4px; opacity: 0.3;
+            z-index: 1; filter: blur(2px) brightness(0.35);
+        }
+        #background-video { width: 100%; height: 100%; object-fit: cover; }
+
+        /* Main UI Console */
+        #main-console {
+            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            width: 90%; max-width: 450px; background: rgba(5, 5, 5, 0.95); 
+            border: 1px solid rgba(255, 255, 255, 0.15); padding: 40px; z-index: 120; 
+            backdrop-filter: blur(15px); box-shadow: 0 0 80px rgba(0,0,0,1);
         }
 
-        /* HUD Elements */
-        .hud { position: fixed; font-size: 14px; color: rgba(255,255,255,0.7); z-index: 55; text-transform: uppercase; }
-        #rec-dot { top: 30px; left: 30px; color: #ff0000; animation: blink 1s infinite; }
-        #timestamp { bottom: 30px; left: 30px; }
-        #play-status { top: 30px; right: 30px; }
-        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
-
-        /* Background Video */
-        #background { 
-            position: fixed; top: 50%; left: 50%; min-width: 100%; min-height: 100%; 
-            z-index: 1; transform: translate(-50%, -50%); object-fit: cover; opacity: 0.4;
+        #profile-name { 
+            font-family: 'Orbitron', sans-serif; font-size: 40px; font-weight: 700;
+            letter-spacing: 4px; text-align: center; margin-bottom: 5px;
+            color: #fff; text-shadow: var(--neon-glow);
         }
 
-        /* Main UI Card */
-        #profile-block { 
-            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); 
-            width: 90%; max-width: 400px; background: rgba(5, 5, 5, 0.95); 
-            border: 1px solid rgba(255, 255, 255, 0.1); padding: 40px;
-            z-index: 60; backdrop-filter: blur(15px); text-align: left;
-            box-shadow: 0 0 50px rgba(0,0,0,1);
+        #profile-tag { text-align: center; color: #444; font-size: 10px; letter-spacing: 3px; margin-bottom: 25px; }
+
+        /* Loading Bar */
+        #loading-container { width: 100%; height: 2px; background: rgba(255,255,255,0.05); margin-bottom: 20px; position: relative; }
+        #loading-bar { width: 0%; height: 100%; background: #fff; box-shadow: 0 0 10px #fff; transition: 0.4s ease; }
+
+        .system-display {
+            width: 100%; height: 70px; border: 1px solid #222; margin-bottom: 25px;
+            overflow: hidden; background: #000;
         }
+        .waveform-gif { width: 100%; height: 100%; object-fit: cover; filter: grayscale(1) contrast(2) brightness(1.2); opacity: 0.7; }
 
-        #profile-name { font-size: 38px; font-weight: 700; letter-spacing: -1px; margin-bottom: 5px; }
-        #profile-bio { color: #444; font-size: 11px; margin-bottom: 25px; letter-spacing: 2px; }
+        #user-quote { font-size: 14px; color: #fff; border-left: 2px solid #fff; padding-left: 15px; margin-bottom: 25px; font-style: italic; }
 
-        #user-quote {
-            font-size: 14px; color: #fff; border-left: 2px solid #fff;
-            padding-left: 15px; margin-bottom: 25px; font-style: italic;
+        .social-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 25px; }
+        .social-btn {
+            border: 1px solid #222; padding: 12px; text-align: center; transition: 0.3s;
+            background: rgba(255,255,255,0.03); display: flex; align-items: center; justify-content: center;
         }
+        .social-btn:hover { background: #fff; border-color: #fff; }
+        .social-btn:hover img { filter: invert(1); }
+        .social-btn img { width: 20px; transition: 0.3s; }
 
-        /* Updated GIF Styling */
-        .waveform-box { 
-            width: 100%; height: 60px; margin-bottom: 25px; overflow: hidden; 
-            border: 1px solid rgba(255,255,255,0.05); background: #000;
-        }
-
-        #now-playing { margin-bottom: 25px; opacity: 0.8; }
-        #now-playing strong { font-size: 12px; display: block; color: #fff; }
-        #now-playing span { font-size: 9px; color: #555; display: block; }
-
-        /* Fixed Logos: Removed Inversion */
-        .social-links { display: flex; gap: 20px; }
-        .social-icon { width: 22px; height: 22px; opacity: 0.7; transition: 0.2s; }
-        .social-icon:hover { opacity: 1; transform: scale(1.1); }
-
-        #terminal-output { 
-            margin-top: 25px; font-size: 10px; color: #444; height: 75px; 
-            border-top: 1px solid #111; padding-top: 15px; line-height: 1.6;
-        }
+        #terminal { font-size: 10px; color: #444; height: 70px; overflow: hidden; line-height: 1.5; font-family: 'Share Tech Mono', monospace; }
 
         /* Entry Screen */
         #start-screen { 
             position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
             background: #000; display: flex; align-items: center; justify-content: center; 
-            z-index: 100; cursor: pointer; transition: 0.8s;
+            z-index: 200; cursor: pointer;
         }
+        #start-screen p { letter-spacing: 12px; color: #fff; font-size: 11px; }
+
+        .invert { filter: invert(1) hue-rotate(180deg); }
+        .hidden { opacity: 0 !important; visibility: hidden !important; transition: 0.8s; }
     </style>
 </head>
-<body>
+<body onmousedown="flashOn()" onmouseup="flashOff()">
 
-    <div id="start-screen" onclick="initSystem()">
-        <p style="letter-spacing: 12px; color: #fff;">[ BOOT_CORE ]</p>
+    <div id="start-screen" onclick="init()">
+        <p>[ INITIALIZE_CORE ]</p>
     </div>
 
-    <div id="vhs-overlay"></div>
+    <div id="background-container">
+        <video id="background-video" loop muted playsinline>
+            <source src="assets/bg.mp4" type="video/mp4">
+        </video>
+    </div>
 
-    <div class="hud" id="rec-dot">● REC</div>
-    <div class="hud" id="play-status">PLAY ▶</div>
-    <div class="hud" id="timestamp">SIGNAL_LOST</div>
-
-    <video id="background" loop muted playsinline>
-        <source src="assets/bg.mp4" type="video/mp4">
-    </video>
-
-    <div id="profile-block">
+    <div id="main-console">
         <h1 id="profile-name">SHAATVIK</h1>
-        <p id="profile-bio">DESIGNER // PRODUCER // PHOTOGRAPHER</p>
+        <p id="profile-tag">DESIGNER // PRODUCER // PHOTOGRAPHER</p>
 
         <div id="user-quote">"Cant Rush Greatness"</div>
 
-        <div class="waveform-box">
-            <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNHJqZ3Rndm5idXF3ZzR3Z3Rndm5idXF3ZzR3Z3Rndm5idXF3ZzR3JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/3o7TKMGpxxcaeqpI40/giphy.gif" 
-                 style="width:100%; height:100%; object-fit:cover; opacity: 0.6;">
+        <div id="loading-container"><div id="loading-bar"></div></div>
+
+        <div class="system-display">
+            <img src="https://i.gifer.com/origin/63/6345e1512e376805466188f277d9053c_w200.gif" class="waveform-gif">
         </div>
 
-        <div id="now-playing">
-            <span>AUD_STREAM_ACTIVE</span>
-            <strong>KEN CARSON - BLAKK ROCKSTAR</strong>
+        <div class="social-grid">
+            <a href="https://instagram.com/shaatvik.m/" target="_blank" class="social-btn"><img src="https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg"></a>
+            <a href="https://x.com/shaatvik69798" target="_blank" class="social-btn"><img src="https://upload.wikimedia.org/wikipedia/commons/c/ce/X_logo_2023.svg"></a>
+            <a href="https://discord.com/users/980731046880493568" target="_blank" class="social-btn"><img src="https://www.svgrepo.com/show/353655/discord-icon.svg"></a>
         </div>
 
-        <div class="social-links">
-            <a href="https://instagram.com/shaatvik.m/"><img src="https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg" class="social-icon"></a>
-            <a href="https://x.com/shaatvik69798"><img src="https://upload.wikimedia.org/wikipedia/commons/c/ce/X_logo_2023.svg" class="social-icon"></a>
-            <a href="https://discord.com/users/980731046880493568"><img src="https://www.svgrepo.com/show/353655/discord-icon.svg" class="social-icon"></a>
-        </div>
-
-        <div id="terminal-output"></div>
+        <div id="terminal"></div>
     </div>
 
     <audio id="bg-audio" loop><source src="assets/blakk-rockstar.mp3" type="audio/mp3"></audio>
-    <audio id="type-sound"><source src="https://www.soundjay.com/communication/typewriter-key-1.mp3" type="audio/mp3"></audio>
+    <audio id="sfx-click"><source src="assets/click.mp3" type="audio/mp3"></audio>
+    <audio id="sfx-type"><source src="assets/type.mp3" type="audio/mp3"></audio>
 
     <script>
-        function initSystem() {
-            // Unlocking Audio
-            const bgAudio = document.getElementById('bg-audio');
-            bgAudio.volume = 0.4;
-            bgAudio.play().catch(e => console.log("Audio play blocked"));
+        const logs = [
+            "> MOUNTING ASSETS...",
+            "> DECRYPTING CORE_IV...",
+            "> GREATNESS_MODULE: LOADED",
+            "> SYSTEM_STATUS: OPTIMAL",
+            "> WELCOME, SHAATVIK."
+        ];
 
-            document.getElementById('background').play();
-            
-            // UI Transition
-            const startScreen = document.getElementById('start-screen');
-            startScreen.style.opacity = '0';
-            setTimeout(() => { startScreen.style.display = 'none'; }, 800);
-            
-            // Terminal Sequence
-            const logs = [
-                "> MOUNTING KERNEL...",
-                "> SYNCING REFRESH_RATE...",
-                "> STATUS: GREATNESS_IN_PROGRESS",
-                "> CORE_ONLINE."
-            ];
-            
+        const clickSfx = document.getElementById('sfx-click');
+        const typeSfx = document.getElementById('sfx-type');
+        const loadBar = document.getElementById('loading-bar');
+
+        function flashOn() {
+            document.body.classList.add('invert');
+            clickSfx.currentTime = 0; clickSfx.volume = 0.3; clickSfx.play().catch(()=>{});
+        }
+
+        function flashOff() { document.body.classList.remove('invert'); }
+
+        function init() {
+            const music = document.getElementById('bg-audio');
+            music.volume = 0.4;
+            music.play().catch(err => console.log("Audio Error:", err));
+
+            document.getElementById('background-video').play();
+            document.getElementById('start-screen').classList.add('hidden');
+
             let i = 0;
-            const terminal = document.getElementById('terminal-output');
-            const typeSfx = document.getElementById('type-sound');
+            const term = document.getElementById('terminal');
+            const typing = setInterval(() => {
+                if(i < logs.length) {
+                    term.innerHTML += logs[i] + "<br>";
+                    
+                    // Update Loading Bar percentage
+                    let progress = ((i + 1) / logs.length) * 100;
+                    loadBar.style.width = progress + "%";
 
-            const interval = setInterval(() => {
-                if (i < logs.length) {
-                    terminal.innerHTML += logs[i] + "<br>";
-                    typeSfx.currentTime = 0;
-                    typeSfx.volume = 0.1;
-                    typeSfx.play().catch(e => {}); // Play typewriter sound
+                    typeSfx.currentTime = 0; typeSfx.volume = 0.15; typeSfx.play().catch(()=>{});
                     i++;
                 } else {
-                    clearInterval(interval);
+                    clearInterval(typing);
+                    setTimeout(() => { loadBar.style.opacity = "0"; }, 500);
                 }
-            }, 700);
-
-            // Clock Update
-            setInterval(() => {
-                const now = new Date();
-                document.getElementById('timestamp').innerHTML = now.toLocaleString().toUpperCase().replace(',', '<br>');
-            }, 1000);
+            }, 800);
         }
     </script>
 </body>
