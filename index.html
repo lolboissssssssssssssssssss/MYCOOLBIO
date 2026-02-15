@@ -4,14 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SHAATVIK // CONSOLE</title>
-    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
     <style>
         :root { --neon-glow: 0 0 15px rgba(255, 255, 255, 0.4); }
         * { margin: 0; padding: 0; box-sizing: border-box; cursor: crosshair; }
         
         body { 
             background-color: #000; color: #fff; overflow: hidden; 
-            height: 100vh; width: 100vw; font-family: 'Share Tech Mono', monospace;
+            height: 100vh; width: 100vw; 
+            font-family: 'Space Mono', monospace;
         }
 
         /* CRT Screen Overlay */
@@ -28,7 +29,6 @@
         }
         #background-video { width: 100%; height: 100%; object-fit: cover; }
 
-        /* Main UI Console */
         #main-console {
             position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
             width: 90%; max-width: 450px; background: rgba(5, 5, 5, 0.95); 
@@ -37,24 +37,30 @@
         }
 
         #profile-name { 
-            font-family: 'Orbitron', sans-serif; font-size: 40px; font-weight: 700;
-            letter-spacing: 4px; text-align: center; margin-bottom: 5px;
-            color: #fff; text-shadow: var(--neon-glow);
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 52px; font-weight: 700;
+            letter-spacing: 8px; text-align: center; margin-bottom: 5px;
+            color: #fff; text-transform: uppercase;
         }
 
-        #profile-tag { text-align: center; color: #444; font-size: 10px; letter-spacing: 3px; margin-bottom: 25px; }
+        #profile-tag { 
+            text-align: center; color: #444; font-size: 10px; 
+            letter-spacing: 5px; margin-bottom: 25px; 
+        }
 
-        #user-quote { font-size: 14px; color: #fff; border-left: 2px solid #fff; padding-left: 15px; margin-bottom: 25px; font-style: italic; }
+        #user-quote { 
+            font-size: 15px; color: #fff; border-left: 2px solid #fff; 
+            padding-left: 15px; margin-bottom: 25px; font-style: italic;
+        }
 
-        /* Now Playing Widget */
+        /* Now Playing Widget Updated */
         #now-playing {
             background: rgba(255, 255, 255, 0.05); padding: 12px; border-radius: 2px;
             display: flex; align-items: center; gap: 10px; margin-bottom: 20px;
             border-left: 3px solid #fff;
         }
-        .music-info { text-align: left; }
-        .music-info span { font-size: 9px; color: #555; display: block; text-transform: uppercase; letter-spacing: 1px; }
-        .music-info strong { font-size: 11px; color: #fff; letter-spacing: 0.5px; text-transform: uppercase; }
+        .music-info span { font-size: 9px; color: #555; display: block; letter-spacing: 1.5px; }
+        .music-info strong { font-size: 11px; color: #fff; letter-spacing: 1px; font-family: 'Rajdhani', sans-serif; text-transform: uppercase; }
 
         .system-display {
             width: 100%; height: 60px; border: 1px solid #222; margin-bottom: 25px;
@@ -73,13 +79,12 @@
 
         #terminal { font-size: 10px; color: #444; height: 70px; overflow: hidden; line-height: 1.5; }
 
-        /* Entry Screen */
         #start-screen { 
             position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
             background: #000; display: flex; align-items: center; justify-content: center; 
             z-index: 200; cursor: pointer;
         }
-        #start-screen p { letter-spacing: 12px; color: #fff; font-size: 11px; }
+        #start-screen p { letter-spacing: 15px; color: #fff; font-size: 12px; font-family: 'Rajdhani', sans-serif; }
 
         .invert { filter: invert(1) hue-rotate(180deg); }
         .hidden { opacity: 0 !important; visibility: hidden !important; transition: 0.8s; }
@@ -106,7 +111,7 @@
         <div id="now-playing">
             <div class="music-info">
                 <span>AUD_STREAM_ACTIVE</span>
-                <strong>Now playing Blakk Rokkstar - Ken Carson</strong>
+                <strong>Now playing Where Was You - Travis Scott</strong>
             </div>
         </div>
 
