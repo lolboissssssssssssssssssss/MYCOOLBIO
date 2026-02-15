@@ -10,27 +10,15 @@
         body { 
             background-color: #000; color: #fff; overflow: hidden; 
             height: 100vh; width: 100vw; font-family: 'Share Tech Mono', monospace; 
-            transition: filter 0.05s;
         }
 
-        /* Interaction Flash */
-        .invert { filter: invert(1) hue-rotate(180deg) contrast(1.2); }
-
-        /* VHS Overlays */
+        /* VHS Overlay */
         #vhs-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             z-index: 50; pointer-events: none;
             background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.2) 50%);
             background-size: 100% 4px; opacity: 0.3;
         }
-
-        .scanline-pulse {
-            position: fixed; top: -100px; left: 0; width: 100%; height: 150px;
-            background: rgba(255, 255, 255, 0.03);
-            z-index: 52; pointer-events: none;
-            animation: moveScan 8s linear infinite;
-        }
-        @keyframes moveScan { 0% { top: -150px; } 100% { top: 100%; } }
 
         /* HUD Elements */
         .hud { position: fixed; font-size: 14px; color: rgba(255,255,255,0.7); z-index: 55; text-transform: uppercase; }
@@ -57,25 +45,28 @@
         #profile-name { font-size: 38px; font-weight: 700; letter-spacing: -1px; margin-bottom: 5px; }
         #profile-bio { color: #444; font-size: 11px; margin-bottom: 25px; letter-spacing: 2px; }
 
-        /* Quote Styling */
         #user-quote {
             font-size: 14px; color: #fff; border-left: 2px solid #fff;
             padding-left: 15px; margin-bottom: 25px; font-style: italic;
-            text-shadow: 0 0 10px rgba(255,255,255,0.5);
         }
 
-        .waveform-box { width: 100%; height: 40px; margin-bottom: 25px; overflow: hidden; opacity: 0.3; filter: grayscale(1) invert(1); }
+        /* Updated GIF Styling */
+        .waveform-box { 
+            width: 100%; height: 60px; margin-bottom: 25px; overflow: hidden; 
+            border: 1px solid rgba(255,255,255,0.05); background: #000;
+        }
 
         #now-playing { margin-bottom: 25px; opacity: 0.8; }
         #now-playing strong { font-size: 12px; display: block; color: #fff; }
         #now-playing span { font-size: 9px; color: #555; display: block; }
 
+        /* Fixed Logos: Removed Inversion */
         .social-links { display: flex; gap: 20px; }
-        .social-icon { width: 18px; height: 18px; filter: invert(1); opacity: 0.5; transition: 0.2s; }
+        .social-icon { width: 22px; height: 22px; opacity: 0.7; transition: 0.2s; }
         .social-icon:hover { opacity: 1; transform: scale(1.1); }
 
         #terminal-output { 
-            margin-top: 25px; font-size: 10px; color: #333; height: 70px; 
+            margin-top: 25px; font-size: 10px; color: #444; height: 75px; 
             border-top: 1px solid #111; padding-top: 15px; line-height: 1.6;
         }
 
@@ -87,14 +78,13 @@
         }
     </style>
 </head>
-<body onmousedown="triggerClickEffect()" onmouseup="removeFlash()">
+<body>
 
     <div id="start-screen" onclick="initSystem()">
-        <p style="letter-spacing: 12px;">[ BOOT_CORE ]</p>
+        <p style="letter-spacing: 12px; color: #fff;">[ BOOT_CORE ]</p>
     </div>
 
     <div id="vhs-overlay"></div>
-    <div class="scanline-pulse"></div>
 
     <div class="hud" id="rec-dot">● REC</div>
     <div class="hud" id="play-status">PLAY ▶</div>
@@ -111,7 +101,8 @@
         <div id="user-quote">"Cant Rush Greatness"</div>
 
         <div class="waveform-box">
-            <img src="https://i.gifer.com/origin/63/6345e1512e376805466188f277d9053c_w200.gif" style="width:100%; height:100%; object-fit:cover;">
+            <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNHJqZ3Rndm5idXF3ZzR3Z3Rndm5idXF3ZzR3Z3Rndm5idXF3ZzR3JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/3o7TKMGpxxcaeqpI40/giphy.gif" 
+                 style="width:100%; height:100%; object-fit:cover; opacity: 0.6;">
         </div>
 
         <div id="now-playing">
@@ -120,69 +111,56 @@
         </div>
 
         <div class="social-links">
-            <a href="https://instagram.com/shaatvik.m/" onmousedown="checkLoad(event)"><img src="https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg" class="social-icon"></a>
-            <a href="https://x.com/shaatvik69798" onmousedown="checkLoad(event)"><img src="https://upload.wikimedia.org/wikipedia/commons/c/ce/X_logo_2023.svg" class="social-icon"></a>
-            <a href="https://discord.com/users/980731046880493568" onmousedown="checkLoad(event)"><img src="https://www.svgrepo.com/show/353655/discord-icon.svg" class="social-icon"></a>
+            <a href="https://instagram.com/shaatvik.m/"><img src="https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg" class="social-icon"></a>
+            <a href="https://x.com/shaatvik69798"><img src="https://upload.wikimedia.org/wikipedia/commons/c/ce/X_logo_2023.svg" class="social-icon"></a>
+            <a href="https://discord.com/users/980731046880493568"><img src="https://www.svgrepo.com/show/353655/discord-icon.svg" class="social-icon"></a>
         </div>
 
         <div id="terminal-output"></div>
     </div>
 
     <audio id="bg-audio" loop><source src="assets/blakk-rockstar.mp3" type="audio/mp3"></audio>
-    <audio id="click-sound"><source src="https://www.soundjay.com/buttons/button-20.mp3" type="audio/mp3"></audio>
     <audio id="type-sound"><source src="https://www.soundjay.com/communication/typewriter-key-1.mp3" type="audio/mp3"></audio>
-    <audio id="warn-sound"><source src="https://www.soundjay.com/communication/digital-beeps-05.mp3" type="audio/mp3"></audio>
 
     <script>
-        let isLoaded = false;
-        const logs = [
-            "> MOUNTING KERNEL...",
-            "> SYNCING REFRESH_RATE...",
-            "> IYKWIM_DECRYPT: OK",
-            "> STATUS: GREATNESS_IN_PROGRESS",
-            "> CORE_ONLINE."
-        ];
-
-        const clickSfx = document.getElementById('click-sound');
-        const typeSfx = document.getElementById('type-sound');
-        const warnSfx = document.getElementById('warn-sound');
-
-        function triggerClickEffect() {
-            document.body.classList.add('invert');
-            clickSfx.currentTime = 0; clickSfx.volume = 0.2; clickSfx.play();
-        }
-
-        function removeFlash() {
-            document.body.classList.remove('invert');
-        }
-
-        function checkLoad(e) {
-            if(!isLoaded) {
-                e.preventDefault();
-                warnSfx.currentTime = 0; warnSfx.volume = 0.3; warnSfx.play();
-            }
-        }
-
         function initSystem() {
-            document.getElementById('bg-audio').volume = 0.4;
-            document.getElementById('bg-audio').play();
+            // Unlocking Audio
+            const bgAudio = document.getElementById('bg-audio');
+            bgAudio.volume = 0.4;
+            bgAudio.play().catch(e => console.log("Audio play blocked"));
+
             document.getElementById('background').play();
-            document.getElementById('start-screen').style.opacity = '0';
-            setTimeout(() => { document.getElementById('start-screen').style.display = 'none'; }, 800);
+            
+            // UI Transition
+            const startScreen = document.getElementById('start-screen');
+            startScreen.style.opacity = '0';
+            setTimeout(() => { startScreen.style.display = 'none'; }, 800);
+            
+            // Terminal Sequence
+            const logs = [
+                "> MOUNTING KERNEL...",
+                "> SYNCING REFRESH_RATE...",
+                "> STATUS: GREATNESS_IN_PROGRESS",
+                "> CORE_ONLINE."
+            ];
             
             let i = 0;
             const terminal = document.getElementById('terminal-output');
+            const typeSfx = document.getElementById('type-sound');
+
             const interval = setInterval(() => {
                 if (i < logs.length) {
                     terminal.innerHTML += logs[i] + "<br>";
-                    typeSfx.currentTime = 0; typeSfx.volume = 0.1; typeSfx.play();
+                    typeSfx.currentTime = 0;
+                    typeSfx.volume = 0.1;
+                    typeSfx.play().catch(e => {}); // Play typewriter sound
                     i++;
                 } else {
                     clearInterval(interval);
-                    isLoaded = true;
                 }
-            }, 600);
+            }, 700);
 
+            // Clock Update
             setInterval(() => {
                 const now = new Date();
                 document.getElementById('timestamp').innerHTML = now.toLocaleString().toUpperCase().replace(',', '<br>');
