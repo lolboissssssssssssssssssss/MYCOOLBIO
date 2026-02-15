@@ -11,8 +11,7 @@
         
         body { 
             background-color: #000; color: #fff; overflow: hidden; 
-            height: 100vh; width: 100vw; 
-            font-family: 'Space Mono', monospace;
+            height: 100vh; width: 100vw; font-family: 'Space Mono', monospace;
         }
 
         /* CRT Screen Overlay */
@@ -37,43 +36,32 @@
         }
 
         #profile-name { 
-            font-family: 'Rajdhani', sans-serif;
-            font-size: 52px; font-weight: 700;
-            letter-spacing: 8px; text-align: center; margin-bottom: 5px;
-            color: #fff; text-transform: uppercase;
+            font-family: 'Rajdhani', sans-serif; font-size: 52px; font-weight: 700;
+            letter-spacing: 8px; text-align: center; margin-bottom: 5px; color: #fff;
         }
 
-        #profile-tag { 
-            text-align: center; color: #444; font-size: 10px; 
-            letter-spacing: 5px; margin-bottom: 25px; 
-        }
+        #profile-tag { text-align: center; color: #444; font-size: 10px; letter-spacing: 5px; margin-bottom: 25px; }
 
-        /* UPDATED QUOTE FONT STYLE */
+        /* Glowing Quote */
         #user-quote { 
-            font-family: 'Syne', sans-serif;
-            font-size: 18px; 
-            font-weight: 800;
-            color: #fff; 
-            border-left: 4px solid #fff; 
-            padding-left: 15px; 
-            margin-bottom: 25px; 
-            text-transform: uppercase;
-            font-style: italic;
-            letter-spacing: -0.5px;
+            font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 800;
+            color: #fff; border-left: 4px solid #fff; padding-left: 15px; 
+            margin-bottom: 25px; text-transform: uppercase; font-style: italic;
+            animation: quote-glow 2s infinite ease-in-out;
+        }
+        @keyframes quote-glow {
+            0%, 100% { text-shadow: 0 0 5px #fff; opacity: 1; }
+            50% { text-shadow: 0 0 20px #fff; opacity: 0.8; }
         }
 
         #now-playing {
             background: rgba(255, 255, 255, 0.05); padding: 12px; border-radius: 2px;
-            display: flex; align-items: center; gap: 10px; margin-bottom: 20px;
-            border-left: 3px solid #fff;
+            display: flex; align-items: center; gap: 10px; margin-bottom: 20px; border-left: 3px solid #fff;
         }
         .music-info span { font-size: 9px; color: #555; display: block; letter-spacing: 1.5px; }
         .music-info strong { font-size: 11px; color: #fff; letter-spacing: 1px; font-family: 'Rajdhani', sans-serif; text-transform: uppercase; }
 
-        .system-display {
-            width: 100%; height: 60px; border: 1px solid #222; margin-bottom: 25px;
-            overflow: hidden; background: #000;
-        }
+        .system-display { width: 100%; height: 60px; border: 1px solid #222; margin-bottom: 25px; overflow: hidden; background: #000; }
         .waveform-gif { width: 100%; height: 100%; object-fit: cover; filter: grayscale(1) contrast(2) brightness(1.2); opacity: 0.7; }
 
         .social-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 25px; }
@@ -81,7 +69,7 @@
             border: 1px solid #222; padding: 12px; text-align: center; transition: 0.3s;
             background: rgba(255,255,255,0.03); display: flex; align-items: center; justify-content: center;
         }
-        .social-btn:hover { background: #fff; border-color: #fff; }
+        .social-btn:hover { background: #fff; }
         .social-btn:hover img { filter: invert(1); }
         .social-btn img { width: 20px; transition: 0.3s; }
 
@@ -89,8 +77,7 @@
 
         #start-screen { 
             position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-            background: #000; display: flex; align-items: center; justify-content: center; 
-            z-index: 200; cursor: pointer;
+            background: #000; display: flex; align-items: center; justify-content: center; z-index: 200; cursor: pointer;
         }
         #start-screen p { letter-spacing: 15px; color: #fff; font-size: 12px; font-family: 'Rajdhani', sans-serif; }
 
@@ -136,7 +123,7 @@
         <div id="terminal"></div>
     </div>
 
-    <audio id="bg-audio" loop><source src="assets/blakk-rockstar.mp3" type="audio/mp3"></audio>
+    <audio id="bg-audio" loop><source src="assets/Blakk-Rockstar.mp3" type="audio/mp3"></audio>
     <audio id="sfx-click"><source src="assets/click.mp3" type="audio/mp3"></audio>
     <audio id="sfx-type"><source src="assets/type.mp3" type="audio/mp3"></audio>
 
@@ -146,7 +133,7 @@
             "> DECRYPTING CORE_IV...",
             "> GREATNESS_MODULE: LOADED",
             "> SYSTEM_STATUS: OPTIMAL",
-            "> WELCOME, VIEWER."
+            "> WELCOME, SHAATVIK."
         ];
 
         const clickSfx = document.getElementById('sfx-click');
