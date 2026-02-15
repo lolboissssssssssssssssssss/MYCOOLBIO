@@ -3,101 +3,102 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shaatvik | Suite</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <title>Shaatvik | Console</title>
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { 
             background-color: #000; color: #fff; overflow: hidden; 
-            height: 100vh; width: 100vw; font-family: 'Inter', sans-serif; 
+            height: 100vh; width: 100vw; font-family: 'Share Tech Mono', monospace; 
+            transition: filter 0.05s;
         }
+
+        /* Interaction Flash */
+        .invert { filter: invert(1) hue-rotate(180deg) contrast(1.2); }
 
         /* VHS Overlays */
         #vhs-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             z-index: 50; pointer-events: none;
-            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%),
-                        linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
-            background-size: 100% 3px, 3px 100%;
-            opacity: 0.6;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.2) 50%);
+            background-size: 100% 4px; opacity: 0.3;
         }
 
-        .hud { 
-            position: fixed; font-family: 'Share Tech Mono', monospace; 
-            font-size: 14px; color: rgba(255,255,255,0.8); z-index: 55; text-transform: uppercase;
+        .scanline-pulse {
+            position: fixed; top: -100px; left: 0; width: 100%; height: 150px;
+            background: rgba(255, 255, 255, 0.03);
+            z-index: 52; pointer-events: none;
+            animation: moveScan 8s linear infinite;
         }
+        @keyframes moveScan { 0% { top: -150px; } 100% { top: 100%; } }
+
+        /* HUD Elements */
+        .hud { position: fixed; font-size: 14px; color: rgba(255,255,255,0.7); z-index: 55; text-transform: uppercase; }
         #rec-dot { top: 30px; left: 30px; color: #ff0000; animation: blink 1s infinite; }
         #timestamp { bottom: 30px; left: 30px; }
         #play-status { top: 30px; right: 30px; }
-
         @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
 
-        /* Centered Background Video */
+        /* Background Video */
         #background { 
             position: fixed; top: 50%; left: 50%; min-width: 100%; min-height: 100%; 
-            z-index: 1; transform: translate(-50%, -50%); object-fit: cover; opacity: 0.5;
+            z-index: 1; transform: translate(-50%, -50%); object-fit: cover; opacity: 0.4;
         }
 
-        /* Profile Card */
+        /* Main UI Card */
         #profile-block { 
             position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); 
-            width: 90%; max-width: 380px; background: rgba(10, 10, 10, 0.9); 
-            border: 1px solid rgba(255, 255, 255, 0.1); padding: 35px; border-radius: 4px; 
-            z-index: 60; backdrop-filter: blur(10px); text-align: center;
+            width: 90%; max-width: 400px; background: rgba(5, 5, 5, 0.95); 
+            border: 1px solid rgba(255, 255, 255, 0.1); padding: 40px;
+            z-index: 60; backdrop-filter: blur(15px); text-align: left;
+            box-shadow: 0 0 50px rgba(0,0,0,1);
         }
 
-        #profile-name { 
-            font-size: 32px; font-weight: 700; letter-spacing: 2px;
-            text-shadow: 0 0 15px rgba(255,255,255,0.5); margin-bottom: 5px;
+        #profile-name { font-size: 38px; font-weight: 700; letter-spacing: -1px; margin-bottom: 5px; }
+        #profile-bio { color: #444; font-size: 11px; margin-bottom: 25px; letter-spacing: 2px; }
+
+        /* Quote Styling */
+        #user-quote {
+            font-size: 14px; color: #fff; border-left: 2px solid #fff;
+            padding-left: 15px; margin-bottom: 25px; font-style: italic;
+            text-shadow: 0 0 10px rgba(255,255,255,0.5);
         }
 
-        #profile-bio { color: #888; font-size: 11px; letter-spacing: 1px; margin-bottom: 20px; }
+        .waveform-box { width: 100%; height: 40px; margin-bottom: 25px; overflow: hidden; opacity: 0.3; filter: grayscale(1) invert(1); }
 
-        /* Animated Waveform Wrapper */
-        .waveform-box {
-            width: 100%; height: 50px; background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.05); margin-bottom: 20px;
-            display: flex; align-items: center; justify-content: center; overflow: hidden;
+        #now-playing { margin-bottom: 25px; opacity: 0.8; }
+        #now-playing strong { font-size: 12px; display: block; color: #fff; }
+        #now-playing span { font-size: 9px; color: #555; display: block; }
+
+        .social-links { display: flex; gap: 20px; }
+        .social-icon { width: 18px; height: 18px; filter: invert(1); opacity: 0.5; transition: 0.2s; }
+        .social-icon:hover { opacity: 1; transform: scale(1.1); }
+
+        #terminal-output { 
+            margin-top: 25px; font-size: 10px; color: #333; height: 70px; 
+            border-top: 1px solid #111; padding-top: 15px; line-height: 1.6;
         }
 
-        /* Now Playing Section */
-        #now-playing {
-            background: rgba(255, 255, 255, 0.05); padding: 10px; border-radius: 2px;
-            display: flex; align-items: center; gap: 10px; margin-bottom: 20px;
-            border-left: 2px solid #fff;
-        }
-        .music-info { text-align: left; font-family: 'Share Tech Mono', monospace; }
-        .music-info span { font-size: 9px; color: #666; display: block; }
-        .music-info strong { font-size: 11px; color: #fff; letter-spacing: 0.5px; }
-
-        .social-links { display: flex; justify-content: center; gap: 20px; margin-top: 10px; }
-        .social-icon { width: 18px; height: 18px; filter: invert(1); opacity: 0.5; transition: 0.3s; }
-        .social-icon:hover { opacity: 1; filter: invert(0); }
-
-        #logs { 
-            font-family: 'Share Tech Mono', monospace; font-size: 9px; 
-            color: #444; text-align: left; margin-top: 20px; border-top: 1px solid #222; padding-top: 10px;
-        }
-
-        /* Start Screen */
+        /* Entry Screen */
         #start-screen { 
             position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
             background: #000; display: flex; align-items: center; justify-content: center; 
-            z-index: 100; cursor: pointer;
+            z-index: 100; cursor: pointer; transition: 0.8s;
         }
     </style>
 </head>
-<body>
+<body onmousedown="triggerClickEffect()" onmouseup="removeFlash()">
 
-    <div id="start-screen" onclick="init()">
-        <p style="letter-spacing: 5px; font-size: 11px; font-family: 'Share Tech Mono';">[ BOOT_SEQUENCE ]</p>
+    <div id="start-screen" onclick="initSystem()">
+        <p style="letter-spacing: 12px;">[ BOOT_CORE ]</p>
     </div>
 
     <div id="vhs-overlay"></div>
+    <div class="scanline-pulse"></div>
 
     <div class="hud" id="rec-dot">● REC</div>
     <div class="hud" id="play-status">PLAY ▶</div>
-    <div class="hud" id="timestamp">FEB 15 2026<br>15:42:01</div>
+    <div class="hud" id="timestamp">SIGNAL_LOST</div>
 
     <video id="background" loop muted playsinline>
         <source src="assets/bg.mp4" type="video/mp4">
@@ -107,41 +108,81 @@
         <h1 id="profile-name">SHAATVIK</h1>
         <p id="profile-bio">DESIGNER // PRODUCER // PHOTOGRAPHER</p>
 
+        <div id="user-quote">"Cant Rush Greatness"</div>
+
         <div class="waveform-box">
-            <img src="https://i.gifer.com/origin/63/6345e1512e376805466188f277d9053c_w200.gif" 
-                 style="width: 100%; height: 100%; object-fit: cover; opacity: 0.4; filter: grayscale(1) contrast(2);" alt="Monitor">
+            <img src="https://i.gifer.com/origin/63/6345e1512e376805466188f277d9053c_w200.gif" style="width:100%; height:100%; object-fit:cover;">
         </div>
 
         <div id="now-playing">
-            <div class="music-info">
-                <span>SIGNAL_STRENGTH: 98%</span>
-                <strong>KEN CARSON - BLAKK ROCKSTAR</strong>
-            </div>
+            <span>AUD_STREAM_ACTIVE</span>
+            <strong>KEN CARSON - BLAKK ROCKSTAR</strong>
         </div>
 
         <div class="social-links">
-            <a href="https://instagram.com/shaatvik.m/"><img src="https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg" class="social-icon"></a>
-            <a href="https://x.com/shaatvik69798"><img src="https://upload.wikimedia.org/wikipedia/commons/c/ce/X_logo_2023.svg" class="social-icon"></a>
-            <a href="https://discord.com/users/980731046880493568"><img src="https://www.svgrepo.com/show/353655/discord-icon.svg" class="social-icon"></a>
+            <a href="https://instagram.com/shaatvik.m/" onmousedown="checkLoad(event)"><img src="https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg" class="social-icon"></a>
+            <a href="https://x.com/shaatvik69798" onmousedown="checkLoad(event)"><img src="https://upload.wikimedia.org/wikipedia/commons/c/ce/X_logo_2023.svg" class="social-icon"></a>
+            <a href="https://discord.com/users/980731046880493568" onmousedown="checkLoad(event)"><img src="https://www.svgrepo.com/show/353655/discord-icon.svg" class="social-icon"></a>
         </div>
 
-        <div id="logs">
-            > TRACK_INDEX: 01<br>
-            > STATUS: PLAYING<br>
-            > IYKWIM_PROTOCOL: ENABLED
-        </div>
+        <div id="terminal-output"></div>
     </div>
 
     <audio id="bg-audio" loop><source src="assets/blakk-rockstar.mp3" type="audio/mp3"></audio>
+    <audio id="click-sound"><source src="https://www.soundjay.com/buttons/button-20.mp3" type="audio/mp3"></audio>
+    <audio id="type-sound"><source src="https://www.soundjay.com/communication/typewriter-key-1.mp3" type="audio/mp3"></audio>
+    <audio id="warn-sound"><source src="https://www.soundjay.com/communication/digital-beeps-05.mp3" type="audio/mp3"></audio>
 
     <script>
-        function init() {
+        let isLoaded = false;
+        const logs = [
+            "> MOUNTING KERNEL...",
+            "> SYNCING REFRESH_RATE...",
+            "> IYKWIM_DECRYPT: OK",
+            "> STATUS: GREATNESS_IN_PROGRESS",
+            "> CORE_ONLINE."
+        ];
+
+        const clickSfx = document.getElementById('click-sound');
+        const typeSfx = document.getElementById('type-sound');
+        const warnSfx = document.getElementById('warn-sound');
+
+        function triggerClickEffect() {
+            document.body.classList.add('invert');
+            clickSfx.currentTime = 0; clickSfx.volume = 0.2; clickSfx.play();
+        }
+
+        function removeFlash() {
+            document.body.classList.remove('invert');
+        }
+
+        function checkLoad(e) {
+            if(!isLoaded) {
+                e.preventDefault();
+                warnSfx.currentTime = 0; warnSfx.volume = 0.3; warnSfx.play();
+            }
+        }
+
+        function initSystem() {
+            document.getElementById('bg-audio').volume = 0.4;
             document.getElementById('bg-audio').play();
             document.getElementById('background').play();
             document.getElementById('start-screen').style.opacity = '0';
-            setTimeout(() => { document.getElementById('start-screen').style.display = 'none'; }, 600);
+            setTimeout(() => { document.getElementById('start-screen').style.display = 'none'; }, 800);
             
-            // Live Time Update
+            let i = 0;
+            const terminal = document.getElementById('terminal-output');
+            const interval = setInterval(() => {
+                if (i < logs.length) {
+                    terminal.innerHTML += logs[i] + "<br>";
+                    typeSfx.currentTime = 0; typeSfx.volume = 0.1; typeSfx.play();
+                    i++;
+                } else {
+                    clearInterval(interval);
+                    isLoaded = true;
+                }
+            }, 600);
+
             setInterval(() => {
                 const now = new Date();
                 document.getElementById('timestamp').innerHTML = now.toLocaleString().toUpperCase().replace(',', '<br>');
